@@ -1,0 +1,8 @@
+README.md
+setup.py
+freqml/__init__.py
+freqml/bars.py
+freqml.egg-info/PKG-INFO
+freqml.egg-info/SOURCES.txt
+freqml.egg-info/dependency_links.txt
+freqml.egg-info/top_level.txt
