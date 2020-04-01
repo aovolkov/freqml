@@ -13,29 +13,39 @@ class bars:
     def volume(self):
         return self._df["amount"].sum()
 
+    @property
+    def dvolume(self):
+        return self._df["cost"].sum()
+
+    def make_bars(grouped):
+        df = grouped["price"].ohlc()
+        df["amount"] = grouped["amount"].sum()
+        df["VWAP"] = grouped["cost"].sum() / df["amount"]
+        df = df.set_index(grouped["timestamp"].nth(0))
+        return df
+
     def TB(self, m=100):
         if self._shape[0] % m != 0:
             self._df = self._df[:-(self._shape[0] % m)]
-        grouped = self._df.groupby(np.floor(self._df["id"] / 100))
-        df_TB = grouped["price"].ohlc()
-        df_TB["amount"] = grouped["amount"].sum()
-        df_TB["VWAP"] = grouped["cost"].sum() / df_TB["amount"]
-        df_TB = df_TB.set_index(grouped["timestamp"].nth(0))
+        grouped = self._df.groupby(np.floor(self._df["id"] / m))
+        df_TB = bars.make_bars(grouped)
         return df_TB
 
-    def VB(self, v=10000):
-        # if int(self.volume) % int(v) != 0:
-        #     self._df = self._df[:-(self.volume % v)]
-        # grouped = self._df.groupby(np.floor(self._df["id"] / 100))
-        # df_TB = grouped["price"].ohlc()
-        # df_TB["amount"] = grouped["amount"].sum()
-        # df_TB["VWAP"] = grouped["cost"].sum() / df_TB["amount"]
-        # df_TB = df_TB.set_index(grouped["timestamp"].nth(0))
-        # return df_TB
-        pass
+    def VB(self, v=5000):
+        self._df["amount_cumsum"] = self._df["amount"].cumsum()
+        df_VB = self._df[self._df["amount_cumsum"] <= np.floor(self.volume - (self.volume % v))]
+        grouped = df_VB.groupby(np.floor(df_VB["amount_cumsum"] / v))
+        del self._df["amount_cumsum"]
+        df_VB = bars.make_bars(grouped)
+        return df_VB
 
-    def DB(self):
-        pass
+    def DB(self, d=10000):
+        self._df["cost_cumsum"] = self._df["cost"].cumsum()
+        df_DB = self._df[self._df["cost_cumsum"] <= np.floor(self.dvolume - (self.dvolume % d))]
+        grouped = df_DB.groupby(np.floor(df_DB["cost_cumsum"] / d))
+        del self._df["cost_cumsum"]
+        df_DB = bars.make_bars(grouped)
+        return df_DB
 
     def TIB(self):
         pass
