@@ -17,11 +17,12 @@ class bars:
     def dvolume(self):
         return self._df["cost"].sum()
 
+    #@staticmethod
     def make_bars(grouped):
         df = grouped["price"].ohlc()
         df["amount"] = grouped["amount"].sum()
         df["VWAP"] = grouped["cost"].sum() / df["amount"]
-        df = df.set_index(grouped["timestamp"].nth(0))
+        df = df.set_index(grouped["timestamp"].nth(-1))
         return df
 
     def TB(self, m=100):
@@ -49,6 +50,7 @@ class bars:
 
     def TIB(self):
         pass
+        # return bars.TB(T)
 
     def VIB(self):
         pass
