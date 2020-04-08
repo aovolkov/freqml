@@ -42,7 +42,7 @@ def read(curr1, curr2="USDT", exchange="binance"):
     return df
 
 
-def load_read(curr1, curr2="USDT", exchange="binance", t="5m", days="50"):
+def load_read(curr1, curr2="USDT", exchange="binance", t="5m", days="1"):
     load(curr1, curr2, exchange, t, days)
     df = read(curr1, curr2, exchange)
     return df

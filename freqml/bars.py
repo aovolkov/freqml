@@ -25,6 +25,29 @@ class bars:
         df = df.set_index(grouped["timestamp"].nth(-1))
         return df
 
+    def plot(self, title="bars", pair="PAIR"):
+        # The section of the Plotly library needed
+        import plotly.graph_objects as go
+
+        # Obtain data from the data frame
+        fig = go.Figure(data=go.Candlestick(x=self._df.index,
+                                     open=self._df["open"],
+                                     high=self._df["high"],
+                                     low=self._df["low"],
+                                     close=self._df["close"]))
+
+        # Add title and annotations
+        fig.update_layout(title_text=title,
+                          title={
+                              'y': 0.9,
+                              'x': 0.5,
+                              'xanchor': 'center',
+                              'yanchor': 'top'},
+                          xaxis_rangeslider_visible=True, xaxis_title="Time", yaxis_title=pair)
+
+        fig.show()
+        del go
+
     def TB(self, m=100):
         if self._shape[0] % m != 0:
             self._df = self._df[:-(self._shape[0] % m)]
@@ -48,9 +71,21 @@ class bars:
         df_DB = bars.make_bars(grouped)
         return df_DB
 
-    def TIB(self):
-        pass
-        # return bars.TB(T)
+    def TIB(self, theta=100):
+        self._df["b"] = (self._df.loc[1:, "price"] == self._df.loc[1:, "price"].shift())
+        self._df["b"] = self._df["b"].apply(lambda x: 1 if x else -1)
+        self._df.loc[:, "theta"] = self._df["b"].cumsum().abs()
+        self._df.loc[:, "TIB_idx"] = 0
+        b_border = 0
+        while self._df.loc[b_border:, "theta"].eq(theta).any():
+            b_border = self._df.loc[b_border:, "theta"].eq(theta).idxmax()
+            self._df.loc[b_border:, "TIB_idx"] += 1
+            self._df.loc[b_border:, "theta"] -= theta
+            self._df.loc[b_border:, "theta"] = self._df["theta"].iloc[b_border:].abs()
+        grouped = self._df.groupby(np.floor(self._df["TIB_idx"]))
+        self._df = self._df.drop(["TIB_idx", "b", "theta"], axis=1)
+        df_TIB = bars.make_bars(grouped)
+        return df_TIB
 
     def VIB(self):
         pass
@@ -66,3 +101,4 @@ class bars:
 
     def DRB(self):
         pass
+
