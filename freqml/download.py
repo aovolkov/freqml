@@ -20,6 +20,7 @@ def clear(df):
 def load(curr1, curr2="USDT", exchange="binance", t="5m", days="1"):
     if os.path.isdir("../user_data/data/" + exchange) == False:
         os.system("cd ../user_data/data && mkdir " + exchange)
+    os.system("cd ../ && ./activate.sh")
     command =   "cd ../ &&"\
               + "freqtrade download-data"\
               + " --exchange " + exchange \
@@ -30,6 +31,7 @@ def load(curr1, curr2="USDT", exchange="binance", t="5m", days="1"):
               + " -v --erase --dl-trades"
     os.system(command)
     filename = get_filename(curr1, curr2, exchange)
+    # поставить условие на удаление
     os.system("gunzip " + filename + ".gz")
 
 
