@@ -46,3 +46,32 @@ def load_read(curr1, curr2="USDT", exchange="binance", t="5m", days="1"):
     load(curr1, curr2, exchange, t, days)
     df = read(curr1, curr2, exchange)
     return df
+
+'''
+class load(args):
+    __init__()
+        pass
+    def dump(df):
+        pass
+    def TB():
+        pass
+    def trade()
+    ...
+class read(args):
+    __init__()
+        pass
+    def TB():
+        df = read_json(filename)
+        return df
+        pass
+    ...
+class load_read(args):
+    __init__()
+        pass
+    def TB():
+        load(args)
+        df = read(args)
+        return df
+        pass
+    ...
+'''

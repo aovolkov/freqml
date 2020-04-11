@@ -82,8 +82,8 @@ class bars:
             self._df.loc[b_border:, "TIB_idx"] += 1
             self._df.loc[b_border:, "theta"] -= theta
             self._df.loc[b_border:, "theta"] = self._df["theta"].iloc[b_border:].abs()
-        grouped = self._df.groupby(np.floor(self._df["TIB_idx"]))
-        self._df = self._df.drop(["TIB_idx", "b", "theta"], axis=1)
+        grouped = self._df.groupby(self._df["TIB_idx"])
+        self._df = self._df.drop(["TIB_idx", "b", "theta"], axis=1, inplace=True)
         df_TIB = bars.make_bars(grouped)
         return df_TIB
 
