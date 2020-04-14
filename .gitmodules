@@ -1,3 +1,6 @@
 [submodule "freqtrade"]
 	path = freqtrade
 	url = https://github.com/freqtrade/freqtrade.git
+[submodule "mlfinlab"]
+	path = mlfinlab
+	url = https://github.com/hudson-and-thames/mlfinlab
