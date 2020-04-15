@@ -1,6 +1,6 @@
 # Quick start
 ```bash
-git clone --recursive https://github.com/AndrewSultan/freqml.git
+git clone --recurse-submodules https://github.com/AndrewSultan/freqml.git
 cd freqml
 # ./setup.sh in the future
 git checkout master
