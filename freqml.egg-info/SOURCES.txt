@@ -3,6 +3,7 @@ setup.py
 freqml/__init__.py
 freqml/bars.py
 freqml/download.py
+freqml/json2csv.py
 freqml.egg-info/PKG-INFO
 freqml.egg-info/SOURCES.txt
 freqml.egg-info/dependency_links.txt
